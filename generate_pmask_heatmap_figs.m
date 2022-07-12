@@ -15,7 +15,7 @@
 param_list = {'ravlt','neon'};
 scan_type_list = {'rfMRI_REST1_AP', 'rfMRI_REST1_PA', 'rfMRI_REST2_AP', 'rfMRI_REST2_PA','tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'};
 
-for n = 1:2
+for n = 1:1
     % ravlt allsubjs cpm outputs
     load(sprintf('../BIG_data_from_CPM_HCP-Aging/%s_by_sex_cpm_output.mat',char(param_list{n})),'cpm_output_by_sex') 
 
@@ -24,7 +24,7 @@ for n = 1:2
     k_folds = 5;
     param = char(param_list{n});
 
-    for i = 1:7           % loops through all scan_types; currently only goes through first two scan types!
+    for i = 1:1           % loops through all scan_types; currently only goes through first two scan types!
         scan_type_num = i;
         
         switch scan_type_num

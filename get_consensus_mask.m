@@ -43,24 +43,6 @@ find(pmask_neg ==1);
 %% use thresholder on pmasks and calculate number of selected edges in pos/neg mats
 thresholder = thresholder_to_use;
 
-%now am able to sum ***still need to figure out this math myself...***
-sum_pos = sum(pmask_pos,2);
-sum_neg = sum(pmask_neg,2);
-
-sum_pos(sum_pos < ( size(pmask,2)* thresholder)) = 0;
-sum_neg(sum_neg > ( size(pmask,2)* thresholder)) = 0;
-
-% sum_pos_tmp(:,k) = +(sum_pos ~= 0);
-% sum_neg_tmp(:,k) = +(sum_neg ~= 0);
-
-sum_pos = +(sum_pos ~= 0);
-sum_neg = +(sum_neg ~= 0);
-
-%these are the sizes of edges that show up in every cross iteration loop
-size_of_pos_mask = length(find(sum_pos));
-size_of_neg_mask = length(find(sum_neg));
-
-
 %% triangularization of pos_mat/neg_mat vectors
 no_node = 268;
 aa = ones(no_node, no_node);
@@ -72,15 +54,30 @@ upp_len = length(upp_id);
 edge_vector_matrix_pos = zeros(no_node, no_node);
 edge_vector_matrix_neg = zeros(no_node, no_node);
 
-%now need to put idx_pos into 35,778 vector
-edge_vector_matrix_pos(upp_id) = sum_pos;
+%now need to put idx_pos into 35,778 vector - makes the 268x268 pmask
+%without removing any node data (will do this later with thresholding)
+edge_vector_matrix_pos(upp_id) = pmask_pos;
 edge_vector_matrix_pos = edge_vector_matrix_pos + edge_vector_matrix_pos';
 MxM_matrix_pos = edge_vector_matrix_pos;
 
-edge_vector_matrix_neg(upp_id) = sum_neg;
+edge_vector_matrix_neg(upp_id) = pmask_neg;
 edge_vector_matrix_neg = edge_vector_matrix_neg + edge_vector_matrix_neg';
 MxM_matrix_neg = edge_vector_matrix_neg;
-clear sum_pos sum_neg
+clear pmask_pos pmask_neg
+
+%% figure out threshold stuff here - for jordan to try!
 
 end
 
+
+
+
+% % sum_pos_tmp(:,k) = +(sum_pos ~= 0);
+% % sum_neg_tmp(:,k) = +(sum_neg ~= 0);
+% 
+% sum_pos = +(sum_pos ~= 0);
+% sum_neg = +(sum_neg ~= 0);
+% 
+% %these are the sizes of edges that show up in every cross iteration loop
+% size_of_pos_mask = length(find(sum_pos));
+% size_of_neg_mask = length(find(sum_neg));

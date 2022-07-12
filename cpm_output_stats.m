@@ -1,5 +1,14 @@
-%% What this function should do:
-% 1. 
+%% Written by Suyeon Ju, 7.10.22, adapted from Corey Horien's scripts
+
+%% general script info
+
+% fxn to 
+
+% inputs:
+%   
+
+% outputs:
+%   
 
 %% Implementation
 function corrs = cpm_output_stats(scan_type_list, cpm_output_struct, allsubjs_or_sex)
