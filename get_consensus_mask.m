@@ -73,9 +73,7 @@ edge_vector_matrix_neg = edge_vector_matrix_neg + edge_vector_matrix_neg';
 MxM_matrix_neg = edge_vector_matrix_neg;
 clear pmask_pos pmask_neg
 
-<<<<<<< HEAD
 %% figure out threshold stuff here - for jordan to try!
-=======
 
 %% Accounting for extra thresholding - currently degree of node
 % If node has less than thresholder connections in brain then don't count
@@ -100,7 +98,6 @@ if thresholder ~= 0
     size_of_pos_mask = countPos;
     size_of_neg_mask = countNeg;
 end    
->>>>>>> e242a64a0620a8e59c0eaec879864e8a0f563431
 
 end
 

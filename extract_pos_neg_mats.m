@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 %% Written by Suyeon Ju, 7.10.22, adapted from Corey Horien's scripts
 
 %% general script info
@@ -66,4 +64,3 @@ for n = 1:2
     end
 
 end
->>>>>>> e242a64a0620a8e59c0eaec879864e8a0f563431
