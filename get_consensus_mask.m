@@ -40,7 +40,7 @@ pmask_neg(pmask_neg==1) = 0;
 find(pmask_pos ==-1);
 find(pmask_neg ==1);
 
-%% use thresholder on pmasks and calculate number of selected edges in pos/neg mats
+%% use thresholder (degree) on pmasks and calculate number of selected edges in pos/neg mats
 thresholder = thresholder_to_use;
 
 %% triangularization of pos_mat/neg_mat vectors
@@ -54,6 +54,14 @@ upp_len = length(upp_id);
 edge_vector_matrix_pos = zeros(no_node, no_node);
 edge_vector_matrix_neg = zeros(no_node, no_node);
 
+<<<<<<< HEAD
+=======
+size_of_pos_mask = length(find(pmask_pos));
+%disp(size_of_pos_mask);
+size_of_neg_mask = length(find(pmask_neg));
+%disp(size_of_neg_mask);
+
+>>>>>>> e242a64a0620a8e59c0eaec879864e8a0f563431
 %now need to put idx_pos into 35,778 vector - makes the 268x268 pmask
 %without removing any node data (will do this later with thresholding)
 edge_vector_matrix_pos(upp_id) = pmask_pos;
@@ -65,7 +73,34 @@ edge_vector_matrix_neg = edge_vector_matrix_neg + edge_vector_matrix_neg';
 MxM_matrix_neg = edge_vector_matrix_neg;
 clear pmask_pos pmask_neg
 
+<<<<<<< HEAD
 %% figure out threshold stuff here - for jordan to try!
+=======
+
+%% Accounting for extra thresholding - currently degree of node
+% If node has less than thresholder connections in brain then don't count
+% and turn row for that node to 0 (not also column b/c that affects other
+% nodes, only considering that node - let Jordan know if that's confusing)
+
+if thresholder ~= 0
+    countPos = no_node;
+    countNeg = no_node;
+    for i=1:no_node
+        if (sum(MxM_matrix_pos(i,:))< thresholder)
+            MxM_matrix_pos(i,:) = 0;
+            countPos = countPos - 1;
+        end    
+        if (abs(sum(MxM_matrix_neg(i,:)))< thresholder)
+            MxM_matrix_neg(i,:) = 0;
+            countNeg = countNeg - 1;
+        end 
+    end
+    disp(countPos);
+    disp(countNeg);
+    size_of_pos_mask = countPos;
+    size_of_neg_mask = countNeg;
+end    
+>>>>>>> e242a64a0620a8e59c0eaec879864e8a0f563431
 
 end
 
