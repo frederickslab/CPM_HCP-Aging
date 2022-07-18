@@ -12,7 +12,8 @@
 %       i.e., "{'all', 'sex'}"
 %
 % outputs:
-%   saves a .mat file for each parameter in param_list with structs holding all pt info ('pt_struct') and connectivity matrices ('conn_mat_struct')
+%   `pt_struct` = holds all pt_tables (all, female, male)
+%   `conn_mat_struct` = holds all conn matt structs (all, female, male)
 %
 % fxns within this fxn:
 %   get_param_scores: collects parameter scores
@@ -24,7 +25,7 @@
 %% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %% Implementation
-function setup_for_cpm_run(param_list, scan_type_list, var_list)
+function [pt_struct,conn_mat_struct] = setup_for_cpm_run(param_list, scan_type_list, var_list)
 tic;
 
 % set pathway strings
@@ -100,21 +101,18 @@ for param = 1:length(param_list)
     % construct conn_mat_structs across whole group
     if allsubj_inp
         conn_mat_struct_all = get_conn_mats(scan_type_list,'hcp_a',pt_table);
+        disp('all')
     end
     
     % construct conn_mat_structs grouped by sex
     if sex_inp
         conn_mat_struct_F = get_conn_mats(scan_type_list,'hcp_a',pt_table_F);
         conn_mat_struct_M = get_conn_mats(scan_type_list,'hcp_a',pt_table_M);
+        disp('sex')
     end
     
     % combine all conn_mat_structs (groups for now: all + female + male)
     conn_mat_struct = struct('all_conn_mats',conn_mat_struct_all,'F_conn_mats',conn_mat_struct_F,'M_conn_mats',conn_mat_struct_M);
-    size(conn_mat_struct)
-    size(conn_mat_struct.conn_mat_struct_F)
-    size(conn_mat_struct.conn_mat_struct_all.rfMRI_REST1_AP)
-    size(conn_mat_struct.conn_mat_struct_F.rfMRI_REST1_AP)
-    size(conn_mat_struct.conn_mat_struct_M.rfMRI_REST1_AP)
 end
 
 toc;
