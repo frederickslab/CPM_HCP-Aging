@@ -2,6 +2,9 @@
 
 %% general script info
 
+% fxn to collect all pt info (pt ID's, sex, age, behavioral parameter
+%   score) 
+
 % inputs:
 %   `param_list` = cell array of parameters to be tested
 %       i.e., "{'ravlt','pcps','nffi'}"
@@ -10,11 +13,13 @@
 %       'tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'
 %       i.e., "{'rfMRI_REST1_AP', 'tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'}"
 
-% example command line:
-% >> run_cpm_setup({'ravlt','neon'},{'rfMRI_REST1_AP', 'rfMRI_REST1_PA', 'rfMRI_REST2_AP', 'rfMRI_REST2_PA','tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'})
-
 % outputs:
-%   saves a .mat file for each param in param_list with structs holding all pt info ('pt_struct_allsubjs') and connectivity matrices ('conn_mat_struct_allsubjs')
+%   saves a .mat file for each param in param_list with structs holding all pt info 
+%       ('pt_struct_allsubjs') and connectivity matrices ('conn_mat_struct_allsubjs')
+
+% example command line:
+% >> run_cpm_setup({'ravlt','neon'},{'rfMRI_REST1_AP', 'rfMRI_REST1_PA', 'rfMRI_REST2_AP', 
+%       'rfMRI_REST2_PA','tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'})
 
 %% Implementation
 function run_cpm_setup(param_list, scan_type_list)
