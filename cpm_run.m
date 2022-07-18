@@ -143,11 +143,11 @@ for param = 1:length(param_list)
            
     %% COLLECT CPM OUTPUTS!
     if strcmp(param_list{param},'ravlt')
-        save('ravlt_cpm_output.mat', 'cpm_output')
+        save('ravlt_cpm_output.mat', 'cpm_output','-v7.3')
         disp('RAVLT results saved!')
     end
     if strcmp(param_list{param},'neon')
-        save('neon_cpm_output.mat', 'cpm_output')
+        save('neon_cpm_output.mat', 'cpm_output','-v7.3')
         disp('NEO-N results saved!')
     end
 %     toc;
