@@ -24,7 +24,4 @@ for st = 1:length(scan_type_list)
     conn_mat_struct.(char(scan_type_list(st))) = conn_mat;
 end
 
-CPM_HCP_Aging_path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/hcp-a_cpm/CPM_HCP-Aging/';
-cd(CPM_HCP_Aging_path)
-
 end

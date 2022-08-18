@@ -24,14 +24,18 @@
 %% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %% Implementation
-function cpm_run(param_list, scan_type_list, var_list)
+function cpm_run(param_list, scan_type_list, var_list, hcp_a_or_a4)
 tic;
+
+if strcmp(hcp_a_or_a4,'hcp_a')
+    path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/hcp-a_cpm/';
+end
+if strcmp(hcp_a_or_a4,'a4')
+    path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/a4_cpm/';
+end
 
 % set pathway strings
 CPM_HCP_Aging_path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/hcp-a_cpm/CPM_HCP-Aging/';
-hcp_a_cpm_path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/hcp-a_cpm/';
-% a4_path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/a4_cpm/'; % this doesn't exist yet LOL
-% behavioralData_path = '/data23/mri_group/an_data/HCP-A2.0/behavioralData/';
 
 %% user input booleans (based on var_list contents)
 allsubj_inp = any(strcmp(var_list,'all'));
@@ -44,18 +48,16 @@ p_thresh = 0.01;
 k_folds = 5;
 
 for param = 1:length(param_list)
-%     tic;
-%     load(sprintf('%s_by_sex_pt_conn_mat.mat',char(param_list{param})),'pt_struct', 'conn_mat_struct')
     cd(CPM_HCP_Aging_path)
     
     %% PT LIST SETUP
     % collect subj demographic info
-    all_pt_demos_temp = readtable(strcat(hcp_a_cpm_path,'HCP-A_cpm_pt_demos.csv'));
+    all_pt_demos_temp = readtable(strcat(path,'HCP-A_cpm_pt_demos.csv'));
     all_pt_demos = table(all_pt_demos_temp.interview_age, all_pt_demos_temp.sex, 'RowNames',all_pt_demos_temp.src_subject_id);
     all_pt_demos.Properties.VariableNames = ["age", "sex"];
     
     % collect all subj ID lists
-    all_param_pt = readtable(strcat(hcp_a_cpm_path,'HCP-A_cpm_project_exclusion_criteria.csv'));
+    all_param_pt = readtable(strcat(path,'HCP-A_cpm_project_exclusion_criteria.csv'));
     
     % set up array for correct subj list from all_subjs
     pt = [];
@@ -106,14 +108,15 @@ for param = 1:length(param_list)
     % construct conn_mat_structs across whole group
     if allsubj_inp
         conn_mat_struct_all = get_conn_mats(scan_type_list,'hcp_a',pt_table);
-%         disp('all')
+        cd(CPM_HCP_Aging_path)
     end
     
     % construct conn_mat_structs grouped by sex
     if sex_inp
         conn_mat_struct_F = get_conn_mats(scan_type_list,'hcp_a',pt_table_F);
+        cd(CPM_HCP_Aging_path)
         conn_mat_struct_M = get_conn_mats(scan_type_list,'hcp_a',pt_table_M);
-%         disp('sex')
+        cd(CPM_HCP_Aging_path)
     end
     
     % combine all conn_mat_structs (groups for now: all + female + male)
@@ -138,8 +141,6 @@ for param = 1:length(param_list)
     end
     
     cpm_output = struct('all_cpm_output',cpm_output_all,'F_cpm_output',cpm_output_F,'M_cpm_output',cpm_output_M);
-    disp(cpm_output)
-    size(cpm_output.all_cpm_output)
            
     %% COLLECT CPM OUTPUTS!
     if strcmp(param_list{param},'ravlt')
@@ -150,7 +151,6 @@ for param = 1:length(param_list)
         save('neon_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
         disp('NEO-N results saved!')
     end
-%     toc;
 end
 
 toc;

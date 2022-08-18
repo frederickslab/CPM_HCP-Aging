@@ -12,7 +12,8 @@ function generate_heatmap(scan, pt)
 
 
 % load conn mat of interest
-load(sprintf('C:/Users/jogal/Yale University/Ju, Suyeon - CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/all_conn_mats.mat'), 'conn_mat_struct_all');
+% load(sprintf('C:/Users/jogal/Yale University/Ju, Suyeon - CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/all_conn_mats.mat'), 'conn_mat_struct_all');
+load(sprintf('/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/all_conn_mats.mat'), 'conn_mat_struct_all');
 conn_matrix = conn_mat_struct_all.(scan).(pt);
 
 %reorder to put 10 networks in order

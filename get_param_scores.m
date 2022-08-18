@@ -11,7 +11,7 @@ opts.VariableNamesLine = 1;
 data = readtable(strcat(behavioralData_path, param_txt_filename),opts);
 y = NaN(length(pt),1);
 for i = 1:length(pt)
-    y(i) = data{strcmp(data.src_subject_id, pt(i)),param_score_col_name}; % see if this gets caught with src_subject_id; it hopefully shouldn't
+    y(i) = data{strcmp(data.src_subject_id, pt(i)),param_score_col_name};
 end
 
 end
