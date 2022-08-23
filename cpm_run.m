@@ -5,11 +5,11 @@
 %
 % inputs:
 %   `param_list` = cell array of parameters to be tested
-%       i.e., "{'ravlt','neon'}"
+%       i.e., `{'ravlt','neon'}`
 %   `scan_type_list` = cell array containing names of different scan types 
-%       i.e., "{'rfMRI_REST1_AP', 'tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'}"
+%       i.e., `{'rfMRI_REST1_AP', 'tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'}`
 %   `var_list` = cell array containing names of variables to group subjects by 
-%       i.e., "{'all', 'sex'}"
+%       i.e., `{'all', 'sex'}`
 %
 % outputs:
 %   saves a .mat file for each parameter in param_list with structs holding all pt info ('pt_struct') and connectivity matrices ('conn_mat_struct')
@@ -27,6 +27,7 @@
 function cpm_run(param_list, scan_type_list, var_list, hcp_a_or_a4)
 tic;
 
+%% SET UP ALL ARGUMENTS FOR CPM RUNS
 if strcmp(hcp_a_or_a4,'hcp_a')
     path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/hcp-a_cpm/';
 end
@@ -37,7 +38,7 @@ end
 % set pathway strings
 CPM_HCP_Aging_path = '/data23/mri_researchers/fredericks_data/shared/hcp_aging_analyses/hcp-a_cpm/CPM_HCP-Aging/';
 
-%% user input booleans (based on var_list contents)
+% user input booleans (based on var_list contents)
 allsubj_inp = any(strcmp(var_list,'all'));
 sex_inp = any(strcmp(var_list,'sex'));
 % age_inp = any(strcmp(var_list,'age')); % haven't made the pt_struct or conn_mat_struct script for this yet!
@@ -47,10 +48,11 @@ n_runs = 100;
 p_thresh = 0.01;
 k_folds = 5;
 
+%% FOR-LOOP THROUGH EACH PARAMETER IN PARAM_LIST
 for param = 1:length(param_list)
     cd(CPM_HCP_Aging_path)
     
-    %% PT LIST SETUP
+%% PT LIST SETUP
     % collect subj demographic info
     all_pt_demos_temp = readtable(strcat(path,'HCP-A_cpm_pt_demos.csv'));
     all_pt_demos = table(all_pt_demos_temp.interview_age, all_pt_demos_temp.sex, 'RowNames',all_pt_demos_temp.src_subject_id);
@@ -65,7 +67,7 @@ for param = 1:length(param_list)
     % set up array for parameter data for each subj
     param_data = [];
     
-    %% set pt array and param_data array to correct subj list/param scores, depending on input params (using 'get_param_scores' fxn)
+    % set pt array and param_data array to correct subj list/param scores, depending on input params (using 'get_param_scores' fxn)
     if strcmp(param_list{param},'ravlt')
         pt_list = all_param_pt.ravlt;
         n_pt = 567; % number of pt's that have RAVLT scores
@@ -85,7 +87,7 @@ for param = 1:length(param_list)
         [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name);
     end
 
-    %% PT STRUCT SETUP
+%% PT STRUCT SETUP
     pt_id = pt;
     age = all_pt_demos{pt,'age'};
     sex = all_pt_demos{pt,'sex'};
@@ -102,7 +104,7 @@ for param = 1:length(param_list)
     % collect whole-group pt_table and all other pt_table groups in pt_struct
     pt_struct = struct('pt_all',pt_table, 'pt_F',pt_table_F, 'pt_M',pt_table_M);
 
-    %% CONN_MAT STRUCT SETUP (using 'get_conn_mats' fxn)
+%% CONN MAT STRUCT SETUP
     cd(CPM_HCP_Aging_path)
     
     % construct conn_mat_structs across whole group
@@ -122,14 +124,15 @@ for param = 1:length(param_list)
     % combine all conn_mat_structs (groups for now: all + female + male)
     conn_mat_struct = struct('all_conn_mats',conn_mat_struct_all,'F_conn_mats',conn_mat_struct_F,'M_conn_mats',conn_mat_struct_M);
     
-    % construct conn_mat_structs across whole group
+%% RUN CPM ON DESIRED GROUPS
+    % cpm model across whole group
     if allsubj_inp
         % whole group model
         cpm_output_all = get_cpm_outputs(scan_type_list,pt_struct.pt_all,conn_mat_struct.all_conn_mats,n_runs,p_thresh,k_folds);
         disp('Finished cpm_output_all')
     end
     
-    % construct conn_mat_structs grouped by sex
+    % cpm model for each sex
     if sex_inp
         % female subjects model
         cpm_output_F = get_cpm_outputs(scan_type_list,pt_struct.pt_F,conn_mat_struct.F_conn_mats,n_runs,p_thresh,k_folds);
@@ -142,7 +145,7 @@ for param = 1:length(param_list)
     
     cpm_output = struct('all_cpm_output',cpm_output_all,'F_cpm_output',cpm_output_F,'M_cpm_output',cpm_output_M);
            
-    %% COLLECT CPM OUTPUTS!
+%% COLLECT CPM OUTPUTS
     if strcmp(param_list{param},'ravlt')
         save('ravlt_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
         disp('RAVLT results saved!')
