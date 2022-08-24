@@ -24,8 +24,6 @@ for n = 1:2
     k_folds = 5;
     param = char(param_list{n});
 
-
-% 
     for i = 1:7 % loops through all scan_types; currently only goes through first two scan types!
         scan_type_num = i;
         
