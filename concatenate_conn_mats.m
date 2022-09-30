@@ -1,7 +1,7 @@
 % concatenate all of the connmats into one large 3D matrix (268 x 268 x n_subs) for each scan type!
 
 data_path = '/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/';
-load([data_path, 'all_conn_mats.mat'], 'conn_mat_struct_all');
+load([data_path, 'all_conn_mats_indiv.mat'], 'conn_mat_struct_all');
 
 scan_types = fieldnames(conn_mat_struct_all);
 

@@ -3,12 +3,12 @@
 clear all
 
 % all options:
-run_all_conn_mats_bool = 1; % includes 'get_all_conn_mats' fxn
-cpm_run_bool = 0;
+run_all_conn_mats_bool = 0; % includes 'get_all_conn_mats' fxn
+cpm_run_bool = 1;
 
 % all arguments:
 scan_type_list = {'rfMRI_REST1_AP','rfMRI_REST1_PA','rfMRI_REST2_AP','rfMRI_REST2_PA','tfMRI_CARIT','tfMRI_FACENAME','tfMRI_VISMOTOR'};
-param_list = {'ravlt'};
+param_list = {'facename'};
 var_list = {'all', 'sex'};
 hcp_a_or_a4 = 'hcp_a';
 

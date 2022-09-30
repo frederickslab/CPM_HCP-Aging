@@ -21,7 +21,7 @@ whole_group_clr = [167 250 186; %rfMRI_REST1_AP
     220 120 6] / 255; %tfMRI_VISMOTOR
 
 % ravlt subplot
-sp1 = subplot(1,3,1);
+sp1 = subplot(1,2,1); % ADJUST THE SUBPLOT CONFIGURATION TO MAKE 1X3 SUBPLOTS!
 sp1.Position = sp1.Position + [.01 .05 0 -0.1];
 b1 = bar(all_R_arrays.ravlt_R.arr_all(:,1), 'facecolor', 'flat');
 b1.CData = whole_group_clr;
@@ -31,7 +31,7 @@ title('RAVLT (Sum of Trials 1-5)');
 xtickangle(20);
 
 % neon subplot
-sp2 = subplot(1,3,2);
+sp2 = subplot(1,2,2); % ADJUST THE SUBPLOT CONFIGURATION TO MAKE 1X3 SUBPLOTS!
 sp2.Position = sp2.Position + [.01 .05 0 -0.1];
 b2 = bar(all_R_arrays.neon_R.arr_all(:,1), 'facecolor', 'flat');
 b2.CData = whole_group_clr;
@@ -41,17 +41,10 @@ title('NEO-N');
 xtickangle(20);
 
 % facename subplot
-sp3 = subplot(1,3,3);
-sp3.Position = sp3.Position + [.01 .05 0 -0.1];
-b3 = bar(all_R_arrays.facename_R.arr_all(:,1), 'facecolor', 'flat');
-b3.CData = whole_group_clr;
-ax3 = gca;
-set(ax3,'XTick',1:numel(scan_type_list),'XTickLabel',scan_type_list,'TickLabelInterpreter', 'none');
-title('FACENAME');
-xtickangle(20);
+% FILL IN THE NECESSARY LINES IN HERE!
 
 % link y-axes of all subplots
-linkaxes([ax1 ax2 ax3], 'y');
+linkaxes([ax1 ax2], 'y'); % CHANGE THIS LINE TO INCLUDE THE FACENAME AXES!
 
 % set title for whole subplot
 sgtitle('Median Pearson correlation vs. behavioral scores across all scans');
@@ -65,23 +58,23 @@ xlabel(han,'Scan type');
 
 % set custom legend for entire figure that labels all seven colors as each
 %   scan type!
-% [DO THISSSSS!!!]
+% [DO THISSSSS!!! @SUYEON]
 
 % add save line (save as png!)
-
+% [DO THISSSSS!!! @SUYEON]
 
 %% sex-based group R values (median Pearson correlation vs. behavioral scores across all scans by sex)
 
 % combine female and male arrays to create stacked bar graphs
 ravlt_FM_arr = cat(2, all_R_arrays.ravlt_R.arr_F(:,1),all_R_arrays.ravlt_R.arr_M(:,1));
 neon_FM_arr = cat(2, all_R_arrays.neon_R.arr_F(:,1),all_R_arrays.neon_R.arr_M(:,1));
-facename_FM_arr = cat(2, all_R_arrays.facename_R.arr_F(:,1),all_R_arrays.facename_R.arr_M(:,1));
+% FILL IN THE NECESSARY LINE IN HERE!
 
 fig2 = figure;
 set(gcf, 'Position', [1000, 100, 1500, 300],'color','w');
 
 % ravlt subplot
-sp1 = subplot(1,3,1);
+sp1 = subplot(1,2,1); % ADJUST THE SUBPLOT CONFIGURATION TO MAKE 1X3 SUBPLOTS!
 sp1.Position = sp1.Position + [.01 .05 0 -0.1];
 b1 = bar(ravlt_FM_arr, 'facecolor', 'flat'); % DON'T FORGET TO SET THE RED AND BLUE COLORS MANUALLY!!
 ax1 = gca; % gca = get current axes
@@ -90,7 +83,7 @@ title('RAVLT (Sum of Trials 1-5)');
 xtickangle(20);
 
 % neon subplot
-sp2 = subplot(1,3,2);
+sp2 = subplot(1,2,2); % ADJUST THE SUBPLOT CONFIGURATION TO MAKE 1X3 SUBPLOTS!
 sp2.Position = sp2.Position + [.01 .05 0 -0.1];
 b2 = bar(neon_FM_arr, 'facecolor', 'flat');
 ax2 = gca;
@@ -99,16 +92,10 @@ title('NEO-N');
 xtickangle(20);
 
 % facename subplot
-sp3 = subplot(1,3,3);
-sp3.Position = sp3.Position + [.01 .05 0 -0.1];
-b3 = bar(facename_FM_arr, 'facecolor', 'flat');
-ax3 = gca;
-set(ax3,'XTick',1:numel(scan_type_list),'XTickLabel',scan_type_list,'TickLabelInterpreter', 'none');
-title('FACENAME');
-xtickangle(20);
+% FILL IN THE NECESSARY LINES IN HERE!
 
 % link y-axes of all subplots
-linkaxes([ax1 ax2 ax3], 'y');
+linkaxes([ax1 ax2], 'y'); % CHANGE THIS LINE TO INCLUDE THE FACENAME AXES!
 
 % set title for whole subplot
 sgtitle('Median Pearson correlation vs. behavioral scores across all scans by sex');
@@ -121,7 +108,7 @@ ylabel(han,'Pearson correlation values (R)');
 xlabel(han,'Scan type');
 
 % set custom legend for each sex
-% [DO THISSSSS!!!]
+% [DO THISSSSS!!! @SUYEON]
 
 % add save line (save as png!)
-
+% [DO THISSSSS!!! @SUYEON]

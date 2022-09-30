@@ -71,8 +71,8 @@ for param = 1:length(param_list)
     if strcmp(param_list{param},'ravlt')
         pt_list = all_param_pt.ravlt;
         n_pt = 567; % number of pt's that have RAVLT scores
-        param_txt_filename = 'ravlt01.txt'; % filename of RAVLT behavioral data (from 2.0 release)
-        param_score_col_name = 'pea_ravlt_sd_tc'; % RAVLT Short Delay Total Correct ***NEED TO CHANGE TO SUM OF TRIALS 1-5!!***
+        param_txt_filename = 'ravlt01_with_trialsum_1-5.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
+        param_score_col_name = 'pea_ravlt_sd_tc_15'; % RAVLT Short Delay Total Correct (Sum of Trials 1-5)
         
         % collect parameter scores
         [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name); 
@@ -86,7 +86,15 @@ for param = 1:length(param_list)
         % collect parameter scores
         [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name);
     end
-
+    if strcmp(param_list{param},'facename')
+        pt_list = all_param_pt.facename;
+        n_pt = 559; % number of pt's that have FACENAME scores
+        param_txt_filename = 'facename_final.txt'; % filename of FACENAME behavioral data (generated using Python)
+        param_score_col_name = 'Score'; % FACENAME Score
+        
+        % collect parameter scores
+        [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name); 
+    end
 %% PT STRUCT SETUP
     pt_id = pt;
     age = all_pt_demos{pt,'age'};
@@ -147,12 +155,16 @@ for param = 1:length(param_list)
            
 %% COLLECT CPM OUTPUTS
     if strcmp(param_list{param},'ravlt')
-        save('ravlt_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
-        disp('RAVLT results saved!')
+        save('ravlt_1-5_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
+        disp('RAVLT (sum of trials 1-5) results saved!')
     end
     if strcmp(param_list{param},'neon')
         save('neon_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
         disp('NEO-N results saved!')
+    end
+    if strcmp(param_list{param},'facename')
+        save('facename_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
+        disp('FACENAME results saved!')
     end
 end
 
