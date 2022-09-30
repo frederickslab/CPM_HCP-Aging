@@ -2,7 +2,7 @@
 
 close all
 
-param_list = {'ravlt','neon'};
+param_list = {'ravlt','neon','facename'};
 % scan_type_list = {'rfMRI_REST1_AP','rfMRI_REST1_PA','rfMRI_REST2_AP','rfMRI_REST2_PA','tfMRI_CARIT','tfMRI_FACENAME','tfMRI_VISMOTOR'};
 scan_type_list = {'REST1_AP','REST1_PA','REST2_AP','REST2_PA','CARIT','FACENAME','VISMOTOR'};
 
@@ -85,7 +85,7 @@ sp1 = subplot(1,3,1);
 sp1.Position = sp1.Position + [.01 .05 0 -0.1];
 b1 = bar(ravlt_FM_arr, 'facecolor', 'flat'); % DON'T FORGET TO SET THE RED AND BLUE COLORS MANUALLY!!
 ax1 = gca; % gca = get current axes
-set(ax1,'XTick',1:numel(scan_type_list),'XTickLabel',scan_type_list,'TickLabelInterpreter', 'none','Ylim',[-0.05 0.36]);
+set(ax1,'XTick',1:numel(scan_type_list),'XTickLabel',scan_type_list,'TickLabelInterpreter', 'none','Ylim',[-0.05 0.45]);
 title('RAVLT (Sum of Trials 1-5)');
 xtickangle(20);
 
