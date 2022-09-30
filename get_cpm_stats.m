@@ -5,7 +5,7 @@ param_list = {'ravlt','neon','facename'};
 scan_type_list = {'rfMRI_REST1_AP','rfMRI_REST1_PA','rfMRI_REST2_AP','rfMRI_REST2_PA','tfMRI_CARIT','tfMRI_FACENAME','tfMRI_VISMOTOR'};
 
 %% collect ravlt corrs for all subject groups (ie, whole group, sex-based, etc)
-load(sprintf('../BIG_data_from_CPM_HCP-Aging/%s_cpm_output.mat',char(param_list{1})),'cpm_output')
+load(sprintf('../BIG_data_from_CPM_HCP-Aging/%s_1-5_cpm_output.mat',char(param_list{1})),'cpm_output')
 ravlt_corrs = cpm_output_stats(scan_type_list, cpm_output, n_runs);
 
 %% collect neon corrs for all subject groups (ie, whole group, sex-based, etc)
