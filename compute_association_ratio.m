@@ -9,8 +9,11 @@
 
 %% load the 268 atlas based connectivity matrices
 data_path = '/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/';
-load([data_path, 'all_conn_mats.mat'], 'all_connmats');
-mat_all = all_connmats.tfMRI_VISMOTOR;
+load([data_path, 'all_conn_mats_indiv.mat'], 'all_connmats');
+
+
+
+% mat_all = all_connmats.tfMRI_VISMOTOR;
 
 %% set up variables for number of subjects, nodes, and networks
 no_sub = size( mat_all, 3);
@@ -51,7 +54,7 @@ for i = 1:no_sub
     cur_mat = squeeze( mat_all(:,:,i));
     ass_ratio(i, :) = association( cur_mat, sigma, label);
 end
-
+mat fi
 plot_association_ratio_hm(ass_ratio)
 
 %% fxn to plot heatmap of association ratios across all networks for each scan type

@@ -12,7 +12,7 @@
 
 %% Implementation
 
-param_list = {'ravlt','neon'};
+param_list = {'facename'};
 scan_type_list = {'rfMRI_REST1_AP', 'rfMRI_REST1_PA', 'rfMRI_REST2_AP', 'rfMRI_REST2_PA','tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'};
 
 for n = 1:length(param_list)

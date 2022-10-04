@@ -8,7 +8,7 @@ cpm_run_bool = 1;
 
 % all arguments:
 scan_type_list = {'rfMRI_REST1_AP','rfMRI_REST1_PA','rfMRI_REST2_AP','rfMRI_REST2_PA','tfMRI_CARIT','tfMRI_FACENAME','tfMRI_VISMOTOR'};
-param_list = {'facename'};
+param_list = {'ravlt_ir','ravlt_pf'};
 var_list = {'all', 'sex'};
 hcp_a_or_a4 = 'hcp_a';
 

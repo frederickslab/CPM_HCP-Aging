@@ -68,11 +68,20 @@ for param = 1:length(param_list)
     param_data = [];
     
     % set pt array and param_data array to correct subj list/param scores, depending on input params (using 'get_param_scores' fxn)
-    if strcmp(param_list{param},'ravlt')
+    if strcmp(param_list{param},'ravlt_ir')
         pt_list = all_param_pt.ravlt;
-        n_pt = 567; % number of pt's that have RAVLT scores
-        param_txt_filename = 'ravlt01_with_trialsum_1-5.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
-        param_score_col_name = 'pea_ravlt_sd_tc_15'; % RAVLT Short Delay Total Correct (Sum of Trials 1-5)
+        n_pt = 566; % number of pt's that have RAVLT scores
+        param_txt_filename = 'ravlt01_ir_pf.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
+        param_score_col_name = 'pea_ravlt_sd_tc_ir'; % RAVLT Immediate (sum of Trials 1-5)
+        
+        % collect parameter scores
+        [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name); 
+    end
+    if strcmp(param_list{param},'ravlt_pf')
+        pt_list = all_param_pt.ravlt;
+        n_pt = 565; % number of pt's that have RAVLT scores
+        param_txt_filename = 'ravlt01_ir_pf.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
+        param_score_col_name = 'pea_ravlt_sd_tc_pf'; % RAVLT Percent Forgetting ((Trial 5 - delayed recall) / Trial 5) 
         
         % collect parameter scores
         [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name); 
@@ -154,9 +163,13 @@ for param = 1:length(param_list)
     cpm_output = struct('all_cpm_output',cpm_output_all,'F_cpm_output',cpm_output_F,'M_cpm_output',cpm_output_M);
            
 %% COLLECT CPM OUTPUTS
-    if strcmp(param_list{param},'ravlt')
-        save('ravlt_1-5_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
-        disp('RAVLT (sum of trials 1-5) results saved!')
+    if strcmp(param_list{param},'ravlt_ir')
+        save('ravlt_ir_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
+        disp('RAVLT-IR results saved!')
+    end
+    if strcmp(param_list{param},'ravlt_pf')
+        save('ravlt_pf_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
+        disp('RAVLT-PF results saved!')
     end
     if strcmp(param_list{param},'neon')
         save('neon_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
@@ -169,4 +182,43 @@ for param = 1:length(param_list)
 end
 
 toc;
+end
+
+% fxn to collect parameter scores (y)
+function [pt,y] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name)
+
+behavioralData_path = '/data23/mri_group/an_data/HCP-A2.0/behavioralData/';
+
+pt = pt_list(1:n_pt,:);
+opts = detectImportOptions(strcat(behavioralData_path, param_txt_filename));
+opts.DataLines = 3;
+opts.VariableNamesLine = 1;
+data = readtable(strcat(behavioralData_path, param_txt_filename),opts);
+y = NaN(length(pt),1);
+for i = 1:length(pt)
+    y(i) = data{strcmp(data.src_subject_id, pt(i)),param_score_col_name};
+end
+
+end
+
+% fxn to construct struct of cpm outputs for all runs for each scan type
+function cpm_output_struct = get_cpm_outputs(scan_type_list,pt_table,conn_mat_struct,n_runs,p_thresh,k_folds)
+
+for st = 1:length(scan_type_list)
+    y_hat_output = zeros(length(pt_table.y),n_runs);
+    corr_output = zeros(2, n_runs);
+    pmask_output = zeros(35778,k_folds,n_runs);
+    for i = 1:n_runs
+        [y_hat,corr,pmask] = cpm_main(conn_mat_struct.(char(scan_type_list(st))),pt_table.y','pthresh',p_thresh,'kfolds',k_folds);
+        y_hat_output(:,i) = y_hat;
+        corr_output(1,i) =  corr(1);
+        corr_output(2,i) =  corr(2);
+        pmask_output(:,:,i) = pmask;
+    end
+
+    cpm_output_struct.(char('y_hat_struct')).(char(scan_type_list(st))) = y_hat_output;
+    cpm_output_struct.(char('corr_struct')).(char(scan_type_list(st))) = corr_output;
+    cpm_output_struct.(char('pmask_struct')).(char(scan_type_list(st))) = pmask_output;
+end
+
 end
