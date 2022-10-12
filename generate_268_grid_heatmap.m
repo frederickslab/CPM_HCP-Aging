@@ -8,7 +8,7 @@
 %Output: prints out heatmap
 
 
-function generate_heatmap(scan,pt)
+function generate_268_grid_heatmap(scan,pt)
 
 % load conn mat of interest
 % load(sprintf('C:/Users/jogal/Yale University/Ju, Suyeon - CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/all_conn_mats.mat'), 'conn_mat_struct_all');
@@ -63,6 +63,6 @@ xlim(a2, [0.5, size(conn_heatmap.ColorData,1)+.5])
 
 
 
-
+end
 
 

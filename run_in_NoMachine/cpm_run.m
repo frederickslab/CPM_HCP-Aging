@@ -68,20 +68,20 @@ for param = 1:length(param_list)
     param_data = [];
     
     % set pt array and param_data array to correct subj list/param scores, depending on input params (using 'get_param_scores' fxn)
-    if strcmp(param_list{param},'ravlt_ir')
-        pt_list = all_param_pt.ravlt;
-        n_pt = 566; % number of pt's that have RAVLT scores
-        param_txt_filename = 'ravlt01_ir_pf.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
-        param_score_col_name = 'pea_ravlt_sd_tc_ir'; % RAVLT Immediate (sum of Trials 1-5)
+    if strcmp(param_list{param},'ravlt_L')
+        pt_list = all_param_pt.ravlt_L;
+        n_pt = 566; % number of pt's that have RAVLT Learning scores
+        param_txt_filename = 'ravlt01_L_IR.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
+        param_score_col_name = 'pea_ravlt_sd_tc_L'; % RAVLT Learning (sum of Trials 1-5)
         
         % collect parameter scores
         [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name); 
     end
-    if strcmp(param_list{param},'ravlt_pf')
-        pt_list = all_param_pt.ravlt;
-        n_pt = 565; % number of pt's that have RAVLT scores
-        param_txt_filename = 'ravlt01_ir_pf.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
-        param_score_col_name = 'pea_ravlt_sd_tc_pf'; % RAVLT Percent Forgetting ((Trial 5 - delayed recall) / Trial 5) 
+    if strcmp(param_list{param},'ravlt_IR')
+        pt_list = all_param_pt.ravlt_IR;
+        n_pt = 574; % number of pt's that have AVLT Immediate Recall scores
+        param_txt_filename = 'ravlt01_L_IR.txt'; % filename of RAVLT behavioral data (from 2.0 release, column added for sum of trials 1-5)
+        param_score_col_name = 'pea_ravlt_sd_trial_vi_tc'; % RAVLT Immediate Recall (LR, score of Trial 6) 
         
         % collect parameter scores
         [pt,param_data] = get_param_scores(pt_list, n_pt, param_txt_filename, param_score_col_name); 
@@ -163,13 +163,13 @@ for param = 1:length(param_list)
     cpm_output = struct('all_cpm_output',cpm_output_all,'F_cpm_output',cpm_output_F,'M_cpm_output',cpm_output_M);
            
 %% COLLECT CPM OUTPUTS
-    if strcmp(param_list{param},'ravlt_ir')
-        save('ravlt_ir_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
-        disp('RAVLT-IR results saved!')
+    if strcmp(param_list{param},'ravlt_L')
+        save('ravlt_L_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
+        disp('RAVLT-L results saved!')
     end
-    if strcmp(param_list{param},'ravlt_pf')
-        save('ravlt_pf_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
-        disp('RAVLT-PF results saved!')
+    if strcmp(param_list{param},'ravlt_IR')
+        save('ravlt_IR_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
+        disp('RAVLT-IR results saved!')
     end
     if strcmp(param_list{param},'neon')
         save('neon_cpm_output.mat', 'pt_struct', 'cpm_output','-v7.3')
@@ -208,17 +208,20 @@ for st = 1:length(scan_type_list)
     y_hat_output = zeros(length(pt_table.y),n_runs);
     corr_output = zeros(2, n_runs);
     pmask_output = zeros(35778,k_folds,n_runs);
+    model_output = zeros(2,1,n_runs)
     for i = 1:n_runs
-        [y_hat,corr,pmask] = cpm_main(conn_mat_struct.(char(scan_type_list(st))),pt_table.y','pthresh',p_thresh,'kfolds',k_folds);
+        [y_hat,corr,pmask,model] = cpm_main(conn_mat_struct.(char(scan_type_list(st))),pt_table.y','pthresh',p_thresh,'kfolds',k_folds);
         y_hat_output(:,i) = y_hat;
         corr_output(1,i) =  corr(1);
         corr_output(2,i) =  corr(2);
         pmask_output(:,:,i) = pmask;
+        model_output(:,:,i) = model;
     end
 
     cpm_output_struct.(char('y_hat_struct')).(char(scan_type_list(st))) = y_hat_output;
     cpm_output_struct.(char('corr_struct')).(char(scan_type_list(st))) = corr_output;
     cpm_output_struct.(char('pmask_struct')).(char(scan_type_list(st))) = pmask_output;
+    cpm_output_struct.(char('model_struct')).(char(scan_type_list(st))) = model_output;
 end
 
 end

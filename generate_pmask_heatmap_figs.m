@@ -1,10 +1,4 @@
-%% Written by Suyeon Ju, 7.10.22, adapted from Corey Horien's scripts
-
-%% general script info
-
-% fxn to visualize pmasks of significant edges from cpm
-
-% inputs: none
+% visualize pmasks of significant edges from cpm
 
 % outputs:
 %   saves 10-network consensus heatmaps of positive and negative matrices for each scan type
@@ -12,46 +6,33 @@
 
 %% Implementation
 
-param_list = {'ravlt','neon'};
+close all
+
+param_list = {'ravlt_L','ravlt_IR','neon','facename'};
 scan_type_list = {'rfMRI_REST1_AP', 'rfMRI_REST1_PA', 'rfMRI_REST2_AP', 'rfMRI_REST2_PA','tfMRI_CARIT', 'tfMRI_FACENAME', 'tfMRI_VISMOTOR'};
 
-for n = 1:1
-    % ravlt allsubjs cpm outputs
-    load(sprintf('../BIG_data_from_CPM_HCP-Aging/%s_by_sex_cpm_output.mat',char(param_list{n})),'cpm_output_by_sex') 
-
-    cpm_output = cpm_output_by_sex;
-    p_thresh = 0.01;
-    k_folds = 5;
-    param = char(param_list{n});
-
-    for i = 1:1           % loops through all scan_types; currently only goes through first two scan types!
-        scan_type_num = i;
+for n = 1:1%length(param_list)
+    load(sprintf('../BIG_data_from_CPM_HCP-Aging/%s_cpm_output.mat',char(param_list{n})),'cpm_output')
+    
+    %% set all necessary variables
+    p_thresh = 0.01; % p threshold used for CPM run
+    k_folds = 5; % number of k folds used in CPM run
+    param = char(param_list{n}); % char variable with name of param
+    trial_count = 100; % number of CPM runs
+    thresholder = 0; % number of degrees (number of edges of node) to threshold by
         
-        switch scan_type_num
-            case 1
-                scan_type = 'rfMRI_REST1_AP';
-            case 2
-                scan_type = 'rfMRI_REST1_PA';
-            case 3
-                scan_type = 'rfMRI_REST2_AP';
-            case 4
-                scan_type = 'rfMRI_REST2_PA';
-            case 5
-                scan_type = 'tfMRI_CARIT';
-            case 6
-                scan_type = 'tfMRI_FACENAME';
-            case 7
-                scan_type = 'tfMRI_VISMOTOR';
-        end
-
-        %% set trial count and threshold values for sig edges
-        trial_count = 100;
-        thresholder = 0;
-
-        %% get positive and negative pmasks and their sizes
-        [pos_mat,neg_mat,pos_mat_size,neg_mat_size] = get_consensus_mask(cpm_output.M.pmask_struct.(scan_type),k_folds,trial_count,thresholder);
-
-        pmask_visualization(pos_mat,neg_mat, param, scan_type)
+    %% get positive and negative pmasks and their sizes
+    for i = 6 %1:length(scan_type_list)
+        % whole group (all)
+        [pos_mat_all,neg_mat_all,pos_mat_size_all,neg_mat_size_all] = get_consensus_mask(cpm_output.all_cpm_output.pmask_struct.(char(scan_type_list{i})),k_folds,trial_count,thresholder);
+        pmask_visualization(pos_mat_all,neg_mat_all, param, scan_type_list{i},'all');
+        
+        % F group
+        [pos_mat_F,neg_mat_F,pos_mat_size_F,neg_mat_size_F] = get_consensus_mask(cpm_output.F_cpm_output.pmask_struct.(char(scan_type_list{i})),k_folds,trial_count,thresholder);
+        pmask_visualization(pos_mat_F,neg_mat_F, param, scan_type_list{i},'F');
+        
+        % M group
+        [pos_mat_M,neg_mat_M,pos_mat_size_M,neg_mat_size_M] = get_consensus_mask(cpm_output.M_cpm_output.pmask_struct.(char(scan_type_list{i})),k_folds,trial_count,thresholder);
+        pmask_visualization(pos_mat_M,neg_mat_M, param, scan_type_list{i},'M');
     end
-
 end

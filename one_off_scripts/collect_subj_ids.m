@@ -1,5 +1,4 @@
-% script to collect all subject id's with existing connectivity matrices
-%   and group them as we need
+% script to collect all subject id's with existing connectivity matrices and group them as we need
 
 % load in struct holding all existing HCP-A 2.0 connectivity matrices
 data_path = '/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/';

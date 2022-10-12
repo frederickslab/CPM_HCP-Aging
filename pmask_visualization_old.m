@@ -1,6 +1,9 @@
 %% Written by Suyeon Ju, 7.10.22, adapted from Corey Horien's scripts
 %% Implementation
-function pmask_visualization(pos_mat,neg_mat,param_name,scan_type_name, group)
+function pmask_visualization(pos_mat,neg_mat,param_name,scan_type_name)
+
+close all
+
 %% visualization setup
 no_nodes = 268;
 no_networks = 10;
@@ -10,7 +13,6 @@ filename = 'ten_network_defn.mat';
 file = fullfile(ten_network_defn_path, filename);
 load(file);
 
-network_ticklabels = {'MF','FP','DMN','Mot','VI','VII','VAs','SAL','SC','CBL'};
 
 %% loading in files you want to group by network size. <- just use pos_mat + neg_mat for now!
 
@@ -140,6 +142,9 @@ end
 
 %%  plotting pos/neg mats of mat_2 (lower triangle of edges normalized by network size)
 %% mat_2_1
+% %saving results to current directory.
+% filename = 'visualizing_CPM_results.mat';
+% save(filename)
 
 SLIM_DP_edges = mat_2{1,1};
 
@@ -149,16 +154,16 @@ SLIM_DP_edges(end+1,:) = 0;
 %finding the max value of each matrix so I can use it to scale the color
 %bar below.
 
-tmp_max = max(SLIM_DP_edges);
-max_SLIM = max(tmp_max);
-% max_SLIM = 0;
+% tmp_max = max(SLIM_DP_edges);
+% max_SLIM = max(tmp_max);
+max_SLIM = 0;
 
 %I'm putting the max value I obtained from directly above in the zero spaces
 %of the upper triangle in my matrix -- I am doing this because they are
 %currently filled with zeros, which results in that square becoming black
 %in my final figure with the current colormap. 
 
-filler_upper_triangle_SLIM = zeros(10,10)*max_SLIM;
+filler_upper_triangle_SLIM = ones(10,10)*max_SLIM;
 filler_upper_triangle_SLIM = triu(filler_upper_triangle_SLIM,1);
 
 filler_upper_triangle_SLIM =[filler_upper_triangle_SLIM zeros(10,1)]; %here I am adding zeros so I can add filler_upper_triangle_SLIM to my matrices below.
@@ -171,17 +176,14 @@ final_SLIM = SLIM_DP_edges + filler_upper_triangle_SLIM;
 figure;
 pcolor(final_SLIM);
 caxis([0 max_SLIM]); %color bar will be scaled from 0 to the max value in the matrix.
-% caxis([0 0.52]); %color bar will be scaled from 0 to 0.52 in the matrix for pos edges (for standardization)
 axis('square');
-set(gca,'YDir','reverse','XTickLabel',network_ticklabels,'YTickLabel',network_ticklabels,'Xtick',1.5 : 1 : 10.5,'Ytick',1.5 : 1 : 10.5);
+set(gca,'YDir','reverse','XTickLabel',{'MF','FP','DMN','Mot','VI','VII','VAs','SAL','SC','CBL'},'YTickLabel',{'MF','FP','DMN','Mot','VI','VII','VAs','SAL','SC','CBL'},'Xtick',1.5 : 1 : 10.5,'Ytick',1.5 : 1 : 10.5);
 set(gcf,'color','w');
 colormap(brewermap(256,'reds'))
-% colormap hot
 colorbar
 title(sprintf("%s - %s 10-network positive-edge heatmap", param_name, scan_type_name), 'Interpreter', 'none');
 
-pos_mat_vis_fig_filename = sprintf('../cpm_figures/ten_network_heatmaps/brewermap/%s_%s_pos_mat_heatmap_%s.png', param_name, scan_type_name, group);
-% pos_mat_vis_fig_filename = sprintf('../cpm_figures/ten_network_heatmaps/hot/%s_%s_pos_mat_heatmap_%s.png', param_name, scan_type_name, group);
+pos_mat_vis_fig_filename = sprintf('/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/cpm_figures/ten_network_heatmaps/M/%s_%s_pos_mat_heatmap_by_sex_M.png', param_name, scan_type_name);
 saveas(gcf,pos_mat_vis_fig_filename)
 
 %% mat_2_2
@@ -193,16 +195,16 @@ SLIM_DP_edges(end+1,:) = 0;
 %finding the max value of each matrix so I can use it to scale the color
 %bar below.
 
-tmp_max = max(SLIM_DP_edges);
-max_SLIM = max(tmp_max);
-% max_SLIM = 0;
+% tmp_max = max(SLIM_DP_edges);
+% max_SLIM = max(tmp_max);
+max_SLIM = 0;
 
 %I'm putting the max value I obtained from directly above in the zero spaces
 %of the upper triangle in my matrix -- I am doing this because they are
 %currently filled with zeros, which results in that square becoming black
 %in my final figure with the current colormap. 
 
-filler_upper_triangle_SLIM = zeros(10,10)*max_SLIM;
+filler_upper_triangle_SLIM = ones(10,10)*max_SLIM;
 filler_upper_triangle_SLIM = triu(filler_upper_triangle_SLIM,1);
 
 filler_upper_triangle_SLIM =[filler_upper_triangle_SLIM zeros(10,1)]; %here I am adding zeros so I can add filler_upper_triangle_SLIM to my matrices below.
@@ -215,17 +217,14 @@ final_SLIM = SLIM_DP_edges + filler_upper_triangle_SLIM;
 figure;
 pcolor(final_SLIM);
 caxis([0 max_SLIM]); %color bar will be scaled from 0 to the max value in the matrix.
-% caxis([0 0.5]); %color bar will be scaled from 0 to 0.5 in the matrix for neg edges (for standardization)
 axis('square');
-set(gca,'YDir','reverse','XTickLabel',network_ticklabels,'YTickLabel',network_ticklabels,'Xtick',1.5 : 1 : 10.5,'Ytick',1.5 : 1 : 10.5);
+set(gca,'YDir','reverse','XTickLabel',{'MF','FP','DMN','Mot','VI','VII','VAs','SAL','SC','CBL'},'YTickLabel',{'MF','FP','DMN','Mot','VI','VII','VAs','SAL','SC','CBL'},'Xtick',1.5 : 1 : 10.5,'Ytick',1.5 : 1 : 10.5);
 set(gcf,'color','w');
 colormap(brewermap(256,'blues'))
-% colormap hot
 colorbar
 title(sprintf("%s - %s 10-network negative-edge heatmap", param_name, scan_type_name), 'Interpreter', 'none');
 
-neg_mat_vis_fig_filename = sprintf('../cpm_figures/ten_network_heatmaps/brewermap/%s_%s_neg_mat_heatmap_%s.png', param_name, scan_type_name, group);
-% neg_mat_vis_fig_filename = sprintf('../cpm_figures/ten_network_heatmaps/hot/%s_%s_neg_mat_heatmap_%s.png', param_name, scan_type_name, group);
+neg_mat_vis_fig_filename = sprintf('/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/cpm_figures/ten_network_heatmaps/M/%s_%s_neg_mat_heatmap_by_sex_M.png', param_name, scan_type_name);
 saveas(gcf,neg_mat_vis_fig_filename)
 
 filename = 'matrix_visualization_for_publication_mat_1_1_su-run.mat';

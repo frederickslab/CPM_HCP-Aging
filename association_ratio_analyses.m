@@ -2,12 +2,6 @@ close all
 % clear
 % clc
 
-%% conn mat stuff
-% 1. use the individual connectivity matrix .mat file to make stacked (3D)
-% matrices in this script run's workspace
-% 2. run the association ratio script on each stacked matrix
-% 3. somehow collect all of the association ratio values and run t-tests
-
 %% load the 268 atlas based connectivity matrices
 data_path = '/Users/sj737/Library/CloudStorage/OneDrive-YaleUniversity/Fredericks_Lab_files/CPM_HCP-A/BIG_data_from_CPM_HCP-Aging/';
 load([data_path, 'all_conn_mats_indiv.mat'], 'conn_mat_struct_all');
@@ -27,9 +21,15 @@ for s = 1:length(scan_type_list)
 %     plot_association_ratio_hm(a_ratio_all, scan_type_list{s}, s, 'all');
 %     plot_association_ratio_hm(a_ratio_F, scan_type_list{s}, s,'F');
 %     plot_association_ratio_hm(a_ratio_M, scan_type_list{s}, s,'M');
-
-    % PERFORM T-TESTS HERE!!!
     
+    % calculate mean of association ratios for each network in sex-based groups
+    a_ratio_F_mean = mean(a_ratio_F);
+    a_ratio_M_mean = mean(a_ratio_M);
+
+    % perform ttest to compare association ratios of networks between sexes for each scan type
+    [h, p, ci, stats] = ttest2(a_ratio_F, a_ratio_M);
+    ttest_output = struct('h', h, 'p', p, 'ci', ci, 'mean_F', a_ratio_F_mean, 'mean_M', a_ratio_M_mean, 'stats', stats);
+    a_ratio_ttest_results.(char(scan_type_list(s))) = ttest_output; % outputs are all 1x10 vectors, where each element is a separate network
 end
 
 %% fxn to concatenate all existing conn mats for each input scan type name
@@ -130,6 +130,3 @@ function ass_ratio = compute_association_ratio(mat_all)
         ass_ratio(i, :) = association( cur_mat, sigma, label);
     end
 end
-
-%% fxn to run t-tests on association ratios between sexes
-
